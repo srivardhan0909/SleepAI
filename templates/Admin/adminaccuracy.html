@@ -1,0 +1,97 @@
+{% extends "Admin/adminbase.html" %}
+
+{% block contents %}
+<div class="container mt-5">
+  <h1 class="text-center mb-4">Train Models and View Accuracies</h1>
+
+  <!-- File Upload Form -->
+  <form method="POST" enctype="multipart/form-data" onsubmit="showLoadingSpinner()">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="dataset" class="form-label">Upload Dataset</label>
+      <input type="file" class="form-control" id="dataset" name="dataset" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Train Models</button>
+  </form>
+
+  <!-- Loading Spinner -->
+  <div id="loadingSpinner" class="d-none text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p>Please wait while the models are being trained...</p>
+  </div>
+
+  <!-- Error Message -->
+  {% if error %}
+  <div class="alert alert-danger mt-4">
+    {{ error }}
+  </div>
+  {% endif %}
+
+  <!-- Results Table -->
+  {% if results %}
+  <div class="mt-5">
+    <h3>Model Accuracies</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Model</th>
+          <th>Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for result in results %}
+        <tr>
+          <td>{{ result.Model }}</td>
+          <td>{{ result.Accuracy|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Accuracy Graph -->
+  <div class="mt-5">
+    <h3>Accuracy Comparison</h3>
+    <canvas id="accuracyChart"></canvas>
+  </div>
+  {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Show loading spinner on form submission
+  function showLoadingSpinner() {
+    document.getElementById('loadingSpinner').classList.remove('d-none');
+  }
+
+  {% if results %}
+  // Render Accuracy Chart
+  const ctx = document.getElementById('accuracyChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ models|safe }},
+      datasets: [{
+        label: 'Accuracy',
+        data: {{ accuracies|safe }},
+        backgroundColor: '#36A2EB',
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Accuracy' }
+        },
+        x: {
+          title: { display: true, text: 'Model' }
+        }
+      }
+    }
+  });
+  {% endif %}
+</script>
+{% endblock %}
