@@ -12,38 +12,32 @@ def login_page(request):
 def register_page(request):
     return render(request, "register.html")
 
-# Define the login function
+# Login View
 def user_login(request):
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # Authenticate user
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
             if not user.is_active:
-                # User is inactive
                 messages.error(request, "Your account is inactive. Please contact the admin.")
                 return redirect('login_page')
 
-            # Login the user
             login(request, user)
 
             if user.is_staff or user.is_superuser:
-                # Redirect to admin home if user is staff
-                return redirect('adminhome')
+                return redirect('adminhome')  # Make sure 'adminhome' URL name exists
             else:
-                # Redirect to user home if user is not staff
-                return redirect('userhome')
+                return redirect('userhome')   # Make sure 'userhome' URL name exists
         else:
-            # Invalid username or password
             messages.error(request, "Invalid username or password.")
             return redirect('login_page')
 
     return render(request, 'login.html')
 
-# Define the user registration function
+# Registration View
 def user_registration(request):
     if request.method == "POST":
         username = request.POST.get('username')
@@ -53,22 +47,24 @@ def user_registration(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
 
-        # Check if passwords match
+        # Validation
+        if not all([username, email, password, confirm_password, first_name, last_name]):
+            messages.error(request, "All fields are required.")
+            return redirect('register_page')
+
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
             return redirect('register_page')
 
-        # Check if username already exists
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
             return redirect('register_page')
 
-        # Check if email already exists
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists.")
             return redirect('register_page')
 
-        # Create the user with is_active set to False
+        # Create inactive user
         user = User.objects.create_user(
             username=username,
             email=email,
@@ -76,15 +72,15 @@ def user_registration(request):
             first_name=first_name,
             last_name=last_name
         )
-        user.is_active = False  # Set is_active to False by default
+        user.is_active = False
         user.save()
 
-        messages.success(request, "Registration successful! Please wait for admin approval.")
+        messages.success(request, "Registration successful! Wait for admin approval.")
         return redirect('login_page')
 
     return render(request, 'register.html')
 
-# Define the logout function
+# Logout View
 def user_logout(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")

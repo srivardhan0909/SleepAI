@@ -1,0 +1,59 @@
+==============================
+admin details :
+username : admin
+password : adm1n@2025
+==============================
+
+==============================
+ SLEEP DISORDER CLASSIFICATION
+
+🟩 SLEEP APNEA
+--------------
+[Condition 1]
+- BMI               : Obese
+- Blood Pressure    : High (>130/85)
+- Sleep Duration    : Less than 6 hours
+
+[Condition 2]
+- Age               : Greater than 35
+- Physical Activity : Less than 40 mins/day
+- Stress Level      : Greater than 6
+
+[Condition 3]
+- Heart Rate        : Greater than 80 bpm
+- Sleep Quality     : Less than 5 (out of 10)
+- Daily Steps       : Less than 5000
+
+
+🟨 INSOMNIA
+----------
+[Condition 1]
+- Sleep Duration    : Less than 6 hours
+- Sleep Quality     : Less than 4
+
+[Condition 2]
+- Stress Level      : Greater than 7
+- Physical Activity : Less than 40 mins/day
+
+[Condition 3]
+- Heart Rate        : Greater than 75 bpm
+- Daily Steps       : Less than 5000
+
+
+🟦 NO SLEEP DISORDER
+--------------------
+[Condition 1]
+- Sleep Duration    : 7 to 8 hours
+- Sleep Quality     : Greater than 7
+
+[Condition 2]
+- Physical Activity : More than 60 mins/day
+- Stress Level      : Less than 5
+
+[Condition 3]
+- BMI               : Normal
+- Blood Pressure    : Normal (around 120/80)
+
+[Condition 4]
+- Heart Rate        : Less than 75 bpm
+- Daily Steps       : More than 7000

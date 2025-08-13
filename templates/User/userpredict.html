@@ -2,14 +2,17 @@
 
 {% block contents %}
 <div class="container mt-5">
-  <h1 class="text-center mb-4">Predict Sleep Disorder</h1>
+  <h1 class="mb-4 text-center" style="font-family: 'Poppins', sans-serif; font-weight: 600;">
+    Predict <span style="color: var(--accent-color);">Sleep Disorder</span>
+  </h1>
+  
   {% if result %}
-  <div class="alert alert-success text-center" role="alert">
+  <div class="text-center alert alert-success" role="alert">
     Prediction Result: <strong>{{ result }}</strong>
   </div>
   {% endif %}
   {% if error %}
-  <div class="alert alert-danger text-center" role="alert">
+  <div class="text-center alert alert-danger" role="alert">
     Error: <strong>{{ error }}</strong>
   </div>
   {% endif %}
@@ -134,8 +137,9 @@
     </div>
 
     <!-- Submit Button -->
-    <div class="col-12 text-center">
-      <button type="submit" class="btn btn-primary">Predict</button>
+    <div class="text-center col-12">
+      <button type="submit" class="btn" 
+      style="background-color: var(--accent-color); color: white; border: 1px solid var(--accent-color);">Predict</button>
     </div>
   </form>
 </div>

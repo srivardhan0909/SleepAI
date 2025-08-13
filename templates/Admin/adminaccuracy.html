@@ -2,7 +2,7 @@
 
 {% block contents %}
 <div class="container mt-5">
-  <h1 class="text-center mb-4">Train Models and View Accuracies</h1>
+  <h1 class="mb-4 text-center" ; style="font-family: 'Poppins', sans-serif; font-weight: 600;">Train Models and View Accuracies</h1>
 
   <!-- File Upload Form -->
   <form method="POST" enctype="multipart/form-data" onsubmit="showLoadingSpinner()">
@@ -15,7 +15,7 @@
   </form>
 
   <!-- Loading Spinner -->
-  <div id="loadingSpinner" class="d-none text-center mt-5">
+  <div id="loadingSpinner" class="mt-5 text-center d-none">
     <div class="spinner-border text-primary" role="status">
       <span class="visually-hidden">Loading...</span>
     </div>
@@ -24,7 +24,7 @@
 
   <!-- Error Message -->
   {% if error %}
-  <div class="alert alert-danger mt-4">
+  <div class="mt-4 alert alert-danger">
     {{ error }}
   </div>
   {% endif %}

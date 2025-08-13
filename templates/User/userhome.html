@@ -2,10 +2,10 @@
 
 {% block contents %}
 <div class="container mt-5">
-    <h1 class="text-center">Welcome, {{ user.username }}!</h1>
+    <h1 class="text-center" style="font-family: 'Poppins', sans-serif; font-weight: 600;">Welcome, <span style="color: var(--accent-color);">{{ user.username }}!</span></h1>
 
-    <div class="user-details mt-4 p-4 border rounded shadow-sm bg-light">
-        <h2 class="text-center mb-4">Your Account Details</h2>
+    <div class="p-4 mt-4 rounded border shadow-sm user-details bg-light">
+        <h2 class="mb-4 text-center">Your Account Details</h2>
         <table class="table table-striped">
             <thead class="thead-light">
                 <tr>

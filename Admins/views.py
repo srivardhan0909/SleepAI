@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.db.models import Count
 from User.models import SleepDisorderPrediction
 from django.core.paginator import Paginator
+import json
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -40,37 +41,56 @@ def admin_update_userstatus(request, user_id):
         return redirect('adminhome')
     
 def admingraphs(request):
-    # Data for gender distribution
-    gender_data = SleepDisorderPrediction.objects.values('gender').annotate(count=Count('id'))
-    gender_labels = [item['gender'] for item in gender_data]
-    gender_counts = [item['count'] for item in gender_data]
+    try:
+        # Check if there are any predictions in the database
+        total_predictions = SleepDisorderPrediction.objects.count()
+        print(f"Total predictions in database: {total_predictions}")
 
-    # Data for BMI distribution
-    bmi_data = SleepDisorderPrediction.objects.values('bmi_category').annotate(count=Count('id'))
-    bmi_labels = [item['bmi_category'] for item in bmi_data]
-    bmi_counts = [item['count'] for item in bmi_data]
+        if total_predictions == 0:
+            return render(request, 'Admin/admingraphs.html', {
+                'error': 'No predictions found in the database. Please add some predictions first.'
+            })
 
-    # Data for blood pressure distribution
-    bp_data = SleepDisorderPrediction.objects.values('blood_pressure').annotate(count=Count('id'))
-    bp_labels = [item['blood_pressure'] for item in bp_data]
-    bp_counts = [item['count'] for item in bp_data]
+        # Data for gender distribution
+        gender_data = list(SleepDisorderPrediction.objects.values('gender').annotate(count=Count('id')))
+        gender_labels = [item['gender'] for item in gender_data]
+        gender_counts = [item['count'] for item in gender_data]
+        print(f"Gender data - Labels: {gender_labels}, Counts: {gender_counts}")
 
-    # Data for prediction results
-    result_data = SleepDisorderPrediction.objects.values('prediction_result').annotate(count=Count('id'))
-    result_labels = [item['prediction_result'] for item in result_data]
-    result_counts = [item['count'] for item in result_data]
+        # Data for BMI distribution
+        bmi_data = list(SleepDisorderPrediction.objects.values('bmi_category').annotate(count=Count('id')))
+        bmi_labels = [item['bmi_category'] for item in bmi_data]
+        bmi_counts = [item['count'] for item in bmi_data]
+        print(f"BMI data - Labels: {bmi_labels}, Counts: {bmi_counts}")
 
-    context = {
-        'gender_labels': gender_labels,
-        'gender_counts': gender_counts,
-        'bmi_labels': bmi_labels,
-        'bmi_counts': bmi_counts,
-        'bp_labels': bp_labels,
-        'bp_counts': bp_counts,
-        'result_labels': result_labels,
-        'result_counts': result_counts,
-    }
-    return render(request, 'Admin/admingraphs.html', context)
+        # Data for blood pressure distribution
+        bp_data = list(SleepDisorderPrediction.objects.values('blood_pressure').annotate(count=Count('id')))
+        bp_labels = [item['blood_pressure'] for item in bp_data]
+        bp_counts = [item['count'] for item in bp_data]
+        print(f"Blood Pressure data - Labels: {bp_labels}, Counts: {bp_counts}")
+
+        # Data for prediction results
+        result_data = list(SleepDisorderPrediction.objects.values('prediction_result').annotate(count=Count('id')))
+        result_labels = [item['prediction_result'] for item in result_data]
+        result_counts = [item['count'] for item in result_data]
+        print(f"Result data - Labels: {result_labels}, Counts: {result_counts}")
+
+        # Ensure all data is properly formatted for JSON
+        context = {
+            'gender_labels': json.dumps(gender_labels),
+            'gender_counts': json.dumps(gender_counts),
+            'bmi_labels': json.dumps(bmi_labels),
+            'bmi_counts': json.dumps(bmi_counts),
+            'bp_labels': json.dumps(bp_labels),
+            'bp_counts': json.dumps(bp_counts),
+            'result_labels': json.dumps(result_labels),
+            'result_counts': json.dumps(result_counts),
+        }
+
+        return render(request, 'Admin/admingraphs.html', context)
+    except Exception as e:
+        print(f"Error in admingraphs view: {str(e)}")
+        return render(request, 'Admin/admingraphs.html', {'error': str(e)})
 
 def adminaccuracy(request):
     if request.method == "POST" and request.FILES.get("dataset"):
@@ -169,8 +189,7 @@ def adminaccuracy(request):
     return render(request, "Admin/adminaccuracy.html")
 
 def admindisplaypredictions(request):
-    # Fetch all SleepDisorderPrediction objects
-    predictions = SleepDisorderPrediction.objects.all().order_by('-timestamp')
+    predictions = SleepDisorderPrediction.objects.all().order_by('-created_at')
     
     # Paginate with 10 objects per page
     paginator = Paginator(predictions, 10)

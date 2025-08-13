@@ -1,23 +1,247 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
 {% block contents %}
-    
-    
-    <!-- Hero Section -->
-    <section id="hero" class="hero section">
+<!-- Hero Section -->
+<section id="" class="">
+  <div class="container">
+    <div class="row align-items-center">
+      <!-- Text Column -->
+       
+      <div class="order-2 col-lg-6 order-lg-1" data-aos="fade-up">
+        <h1 class="mb-3 display-4 fw-bold">
+          Detect and Classify <span style="color: var(--accent-color);">Sleep Disorders</span> with Precision
+        </h1>
+        
+        <p class="mb-4 text-muted" style="font-size: 1.3rem; font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;">
+          Advanced machine learning techniques to help diagnose and classify various sleep disorders, providing accurate and efficient analysis for better patient care.
+        </p>
+        
+        <div class="flex-wrap gap-3 mb-8 d-flex">
+          <a href="{% url 'login_page' %}" 
+               class="btn" 
+               style="background-color: var(--accent-color); color: white; border: 1px solid var(--accent-color);">
+              Get Started
+            </a>
+            <a href="#how-it-works" class="btn-hover-effect">See How It Works</a>
+        </div>
+      </div>
 
-        <img src="{% static 'img/sleeping-disorder.jpg' %}" alt="" data-aos="fade-in">
-  
-        <div class="container text-center" data-aos="zoom-out" data-aos-delay="100">
-          <div class="row justify-content-center">
-            <div class="col-lg-8">
-              <h2>APPLYING MACHINE LEARNING ALGORITHMS FOR THE CLASSIFICATION OF SLEEP DISORDERS</h2>
-              <p></p>
+      <!-- Image Column -->
+      <div class="order-1 mb-6 overflow-hidden text-center border rounded col-lg-6 order-lg-2 mb-lg-0 bg-light">
+        <img
+          src="{% static 'img/sleep-disorder.png' %}"
+          class="img-fluid ms-auto d-block"
+          style="max-width: 100%; height: 450px;"
+          alt="Sleep Disorder Illustration"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features section">
+  <div class="container">
+    <!-- Inline root variable definition -->
+    <div style="--accent-color: #28a745;">
+      <div class="mb-5 text-center section-title" data-aos="fade-up">
+        <h2>Key Features</h2>
+        <p>Our advanced system provides comprehensive sleep disorder analysis</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+          <div class="p-4 rounded shadow-sm feature-card">
+            <div class="mb-3 icon-box">
+              <i class="bi bi-cpu fs-1" style="color: var(--accent-color);"></i>
             </div>
+            <h3>ML Analysis</h3>
+            <p>
+              Advanced algorithms for accurate sleep disorder classification and prediction.
+            </p>
           </div>
         </div>
-  
-      </section><!-- /Hero Section -->
 
-{% endblock %}
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+          <div class="p-4 rounded shadow-sm feature-card">
+            <div class="mb-3 icon-box">
+              <i class="bi bi-graph-up fs-1" style="color: var(--accent-color);"></i>
+            </div>
+            <h3>Data Visualization</h3>
+            <p>
+              Interactive charts and graphs for better understanding of sleep patterns.
+            </p>
+          </div>
+        </div>
+
+        <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+          <div class="p-4 rounded shadow-sm feature-card">
+            <div class="mb-3 icon-box">
+              <i class="bi bi-shield-check fs-1" style="color: var(--accent-color);"></i>
+            </div>
+            <h3>Secure Platform</h3>
+            <p>Your data is protected with state-of-the-art security measures.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- How It Works Section -->
+<section id="how-it-works" class="py-5">
+  <div class="container">
+    <div class="mb-5 text-center" data-aos="fade-up">
+      <h2 class="fw-bold">How It Works</h2>
+      <p class="text-muted">Follow these simple steps to get your sleep analysis</p>
+    </div>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="text-center timeline d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+          <div class="step" data-aos="fade-up" data-aos-delay="100">
+            <div class="step-icon">📝</div>
+            <h5>Step 1</h5>
+            <p>Register/Login</p>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="200">
+            <div class="step-icon">📤</div>
+            <h5>Step 2</h5>
+            <p>Upload sleep pattern data</p>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="300">
+            <div class="step-icon">📈</div>
+            <h5>Step 3</h5>
+            <p>Get prediction</p>
+          </div>
+          <div class="step" data-aos="fade-up" data-aos-delay="400">
+            <div class="step-icon">💬</div>
+            <h5>Step 4</h5>
+            <p>View reports</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section id="cta" class="cta section bg-light">
+  <div class="container text-center" data-aos="fade-up">
+    <h2 class="mb-4">Ready to Get Started?</h2>
+    <p class="mb-4 lead">
+      Join our platform today and experience the power of machine learning in sleep disorder analysis.
+    </p>
+    {% if not user.is_authenticated %}
+    <div class="flex-wrap gap-3 d-flex justify-content-center">
+      <a href="{% url 'login_page' %}" class="btn" 
+      style="background-color: var(--accent-color); color: white; border: 1px solid var(--accent-color);">Login</a>
+      <a href="{% url 'register_page' %}" class="btn-hover-effect">Register</a>
+
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Styles -->
+<style>
+   .btn-hover-effect {
+    background-color: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: 10px 20px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .btn-hover-effect:hover {
+    background-color: var(--accent-color);
+    color: white;
+  }
+  
+  body.index-page::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(at 30% 20%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
+    radial-gradient(at 70% 30%, rgba(245, 245, 255, 0.6) 0%, transparent 60%),
+    radial-gradient(at 50% 80%, rgba(240, 255, 250, 0.5) 0%, transparent 70%),
+    linear-gradient(180deg, #fdfdfd 0%, #f6f7fb 100%);
+  backdrop-filter: blur(1px);
+}
+section, main, .main {
+  background: transparent !important;
+}
+
+
+  .placeholder-image {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    border: 2px dashed #dee2e6;
+  }
+
+  .feature-card {
+    background: white;
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .icon-box {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(24, 144, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+
+  .timeline {
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .step {
+    flex: 1;
+    min-width: 150px;
+    margin-bottom: 2rem;
+  }
+
+  .step-icon {
+    font-size: 3rem;
+    background: #e6f0ff;
+    color: #1890ff;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 768px) {
+    .timeline {
+      flex-direction: column;
+      align-items: center;
+    }
+    .step {
+      text-align: center;
+    }
+  }
+</style>
+{% endblock contents %}

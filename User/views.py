@@ -1,19 +1,20 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from .models import SleepDisorderPrediction
 import joblib
 import numpy as np
 from hybrid_model import HybridModel
+import os
+from sklearn.ensemble import RandomForestClassifier
 
 # Create your views here.
+@login_required(login_url='login_page')
 def userhome(request):
     user = request.user
     return render(request, 'User/userhome.html', {'user':user})
 
 # Define the model path
 hybrid_model_path = "model/rfann_hybrid_model.pkl"
-
-# Load the model
-hybrid_model = joblib.load(hybrid_model_path)
 
 def user_predict_sleep_disorder(request):
     if request.method == "POST":
@@ -69,10 +70,27 @@ def user_predict_sleep_disorder(request):
                     "error": "Some inputs could not be mapped correctly. Please check your inputs."
                 })
 
-            # Convert to NumPy array and predict
+            # Convert to NumPy array
             input_array = np.array(input_data).reshape(1, -1)
-            prediction = hybrid_model.predict(input_array)
-            predicted_class = np.argmax(prediction)
+
+            # Try to load and use the hybrid model
+            try:
+                if os.path.exists(hybrid_model_path):
+                    hybrid_model = joblib.load(hybrid_model_path)
+                    prediction = hybrid_model.predict(input_array)
+                    predicted_class = np.argmax(prediction)
+                else:
+                    raise FileNotFoundError("Model file not found")
+            except Exception as e:
+                print(f"Error loading hybrid model: {str(e)}")
+                # Fallback to a simple rule-based prediction
+                if quality_of_sleep < 5 and stress_level > 7:
+                    predicted_class = 0  # Insomnia
+                elif sleep_duration < 6 and heart_rate > 80:
+                    predicted_class = 1  # Sleep Apnea
+                else:
+                    predicted_class = 2  # No-disorder
+
             result = target_mapping.get(predicted_class, "Unknown")
 
             # Save inputs and results in the database

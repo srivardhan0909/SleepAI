@@ -1,0 +1,136 @@
+{% extends 'Admin/adminbase.html' %} {% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Sleep Disorder Analysis Graphs</h2>
+
+  {% if error %}
+  <div class="alert alert-danger">Error: {{ error }}</div>
+  {% endif %}
+
+  <!-- Debug Information -->
+  <div class="d-none">
+    <p>Gender Labels: {{ gender_labels|safe }}</p>
+    <p>Gender Counts: {{ gender_counts|safe }}</p>
+    <p>BMI Labels: {{ bmi_labels|safe }}</p>
+    <p>BMI Counts: {{ bmi_counts|safe }}</p>
+    <p>BP Labels: {{ bp_labels|safe }}</p>
+    <p>BP Counts: {{ bp_counts|safe }}</p>
+    <p>Result Labels: {{ result_labels|safe }}</p>
+    <p>Result Counts: {{ result_counts|safe }}</p>
+  </div>
+
+  <div class="row">
+    <!-- Gender Distribution -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Gender Distribution</h5>
+          <canvas id="genderChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- BMI Distribution -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">BMI Category Distribution</h5>
+          <canvas id="bmiChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blood Pressure Distribution -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Blood Pressure Distribution</h5>
+          <canvas id="bpChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prediction Results -->
+    <div class="col-md-6 mb-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Prediction Results Distribution</h5>
+          <canvas id="resultChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // Wait for DOM to be fully loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      // Gender Chart
+      new Chart(document.getElementById('genderChart'), {
+        type: 'pie',
+        data: {
+          labels: {{ gender_labels|safe }},
+          datasets: [{
+            data: {{ gender_counts|safe }},
+            backgroundColor: ['#FF6384', '#36A2EB']
+          }]
+        }
+      });
+
+      // BMI Chart
+      new Chart(document.getElementById('bmiChart'), {
+        type: 'pie',
+        data: {
+          labels: {{ bmi_labels|safe }},
+          datasets: [{
+            data: {{ bmi_counts|safe }},
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
+          }]
+        }
+      });
+
+      // Blood Pressure Chart
+      new Chart(document.getElementById('bpChart'), {
+        type: 'bar',
+        data: {
+          labels: {{ bp_labels|safe }},
+          datasets: [{
+            label: 'Count',
+            data: {{ bp_counts|safe }},
+            backgroundColor: '#36A2EB'
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+      // Prediction Results Chart
+      new Chart(document.getElementById('resultChart'), {
+        type: 'pie',
+        data: {
+          labels: {{ result_labels|safe }},
+          datasets: [{
+            data: {{ result_counts|safe }},
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+          }]
+        }
+      });
+    } catch (error) {
+      console.error('Error creating charts:', error);
+      document.querySelector('.container').innerHTML += `
+        <div class="alert alert-danger mt-3">
+          Error creating charts: ${error.message}
+        </div>
+      `;
+    }
+  });
+</script>
+{% endblock %}
